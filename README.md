@@ -42,3 +42,6 @@ Install these prerequisites to follow along with the tutorial. See free video tu
   $ npm run start 
   ```
   Visit this URL in your browser: http://localhost:3000
+
+
+npm install @truffle/hdwallet-provider
