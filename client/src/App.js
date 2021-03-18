@@ -36,8 +36,13 @@ class App extends Component {
   async loadBlockchainData() {
     const web3 = window.web3
     // Load account
+    const adminid = "0xC5f2f554ff3640f975BB8d8CAD49922e69dc2956"
     const accounts = await web3.eth.getAccounts()
     this.setState({ account: accounts[0] })
+    if(this.state.account === adminid){
+      console.log("Marjaaaa")
+      this.setState({admin:true})
+    }
     // Network ID
     const networkId = await web3.eth.net.getId()
     const networkData = MyContract.networks[networkId]
@@ -88,6 +93,7 @@ class App extends Component {
       queCount: 0,
       ansCount: 0,
       answers: [],
+      admin: false,
   }
 
     this.postQuestion = this.postQuestion.bind(this)
@@ -122,62 +128,71 @@ class App extends Component {
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
-    return (
+    else{
+      if(this.state.admin){
+        return <div> Hello World </div>;
+      }
+      else{
       
-      <div className="App">
-        <div class="InputBox">
-              { this.state.loading
-                ? <div id="loader" className="text-center">
-                  <Spinner animation="border" role="status">
-                    <span className="sr-only">Loading...</span>
-                  </Spinner>
-                  <p className="text-center">Loading...</p></div>
-                :<div> 
-
-                  
-                  <Router>
-                    <div>
-                      <Navbar bg="dark" variant="dark" height="30" style={{marginTop:"0%"}}>
-                        <Navbar.Brand >
-                          <Link to={'/'} className="nav-link" style={{fontFamily:"sans-serif", fontWeight:"bold", color:"white"}}><img src={Dora} width="100" height="50"/>THE EXPLORER</Link>
-                        
-                        </Navbar.Brand>
-                      
-                      <ul className="navbar-nav mr-auto" style={{paddingLeft:"57%"}}>
-                      <li><Link to={'/questionInput'} className="nav-link" style={{fontFamily:"sans-serif", fontWeight:"bold", color:"white"}}>Dora World</Link></li>
-                      <li><Link to={'/profile'} className="nav-link" style={{fontFamily:"sans-serif", fontWeight:"bold", color:"white"}}>My Profile</Link></li>
-                      <li><Link to={'/about'} className="nav-link" style={{fontFamily:"sans-serif", fontWeight:"bold", color:"white"}}>About Us</Link></li>                        
-                      </ul>
-                      </Navbar>
-                      
-                      <Switch>
-                          <Route exact path='/' component={Home} />
-                          <Route exact path='/' component={QuestionInput} />
-                          <Route path='/profile' render={(props) => <Profile author={this.state.account} questions={this.state.questions}                   
-                                answers={this.state.answers} {...props}/>}/>
-
-                          <Route path="/questionInput" render={(props) => <QuestionInput questions={this.state.questions}                   
-                                postQuestion={this.postQuestion} 
-                                addAnswer={this.addAnswer}
-                                answers={this.state.answers}
-                                tipAnswer={this.tipAnswer} {...props}/>}/>
-                          <Route path='/about' component={About} />
-                      </Switch>
-                    </div>
-                    
-                  </Router>
-
-                                        
-                 </div>
-                 
-                 
-              }
-        </div>
+        return (
         
-      </div>
-      
-      
-    );
+          <div className="App">
+            <div class="InputBox">
+                  { this.state.loading
+                    ? <div id="loader" className="text-center">
+                      <Spinner animation="border" role="status">
+                        <span className="sr-only">Loading...</span>
+                      </Spinner>
+                      <p className="text-center">Loading...</p></div>
+                    :<div> 
+    
+                      
+                      <Router>
+                        <div>
+                          <Navbar bg="dark" variant="dark" height="30" style={{marginTop:"0%"}}>
+                            <Navbar.Brand >
+                              <Link to={'/'} className="nav-link" style={{fontFamily:"sans-serif", fontWeight:"bold", color:"white"}}><img src={Dora} width="100" height="50"/>THE EXPLORER</Link>
+                            
+                            </Navbar.Brand>
+                          
+                          <ul className="navbar-nav mr-auto" style={{paddingLeft:"57%"}}>
+                          <li><Link to={'/questionInput'} className="nav-link" style={{fontFamily:"sans-serif", fontWeight:"bold", color:"white"}}>Dora World</Link></li>
+                          <li><Link to={'/profile'} className="nav-link" style={{fontFamily:"sans-serif", fontWeight:"bold", color:"white"}}>My Profile</Link></li>
+                          <li><Link to={'/about'} className="nav-link" style={{fontFamily:"sans-serif", fontWeight:"bold", color:"white"}}>About Us</Link></li>                        
+                          </ul>
+                          </Navbar>
+                          
+                          <Switch>
+                              <Route exact path='/' component={Home} />
+                              <Route exact path='/' component={QuestionInput} />
+                              <Route path='/profile' render={(props) => <Profile author={this.state.account} questions={this.state.questions}                   
+                                    answers={this.state.answers} {...props}/>}/>
+    
+                              <Route path="/questionInput" render={(props) => <QuestionInput questions={this.state.questions}                   
+                                    postQuestion={this.postQuestion} 
+                                    addAnswer={this.addAnswer}
+                                    answers={this.state.answers}
+                                    tipAnswer={this.tipAnswer} {...props}/>}/>
+                              <Route path='/about' component={About} />
+                          </Switch>
+                        </div>
+                        
+                      </Router>
+    
+                                            
+                     </div>
+                     
+                     
+                  }
+            </div>
+            
+          </div>
+          
+          
+        );
+    }
+    }
+    
   }
 }
 
