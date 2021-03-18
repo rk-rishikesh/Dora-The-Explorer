@@ -152,6 +152,7 @@ class App extends Component {
                       
                       <Switch>
                           <Route exact path='/' component={Home} />
+                          <Route exact path='/' component={QuestionInput} />
                           <Route path='/profile' render={(props) => <Profile author={this.state.account} questions={this.state.questions}                   
                                 answers={this.state.answers} {...props}/>}/>
 

@@ -1,0 +1,23 @@
+.not-found {
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(248, 247, 244);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .button1 {
+    background-color: #555555;;
+    color: rgb(239, 243, 243);
+    padding: 10px 24px;;
+    margin-left: 400px;
+    margin-bottom: 100px;
+    align-items: center;
+}
+
+.butt{
+    align-items: center;
+}
