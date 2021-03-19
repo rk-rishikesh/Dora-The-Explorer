@@ -10,9 +10,9 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import Home from './Components/Home';
 import Profile from './Components/Profile';
 import About from "./Components/About";
+import Admin from "./Components/Admin";
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
-
- 
 class App extends Component {
 //No Change 
   async componentWillMount() {
@@ -36,7 +36,8 @@ class App extends Component {
   async loadBlockchainData() {
     const web3 = window.web3
     // Load account
-    const adminid = "0xC5f2f554ff3640f975BB8d8CAD49922e69dc2956"
+    //const adminid = "0xC5f2f554ff3640f975BB8d8CAD49922e69dc2956"
+    const adminid="0xa7c3e1dbE2B1D4b6f5D1b5B68E0F139a1EbE79bD"
     const accounts = await web3.eth.getAccounts()
     this.setState({ account: accounts[0] })
     if(this.state.account === adminid){
@@ -130,7 +131,7 @@ class App extends Component {
     }
     else{
       if(this.state.admin){
-        return <div> Hello World </div>;
+        return <div> <Admin/> </div>;
       }
       else{
       
