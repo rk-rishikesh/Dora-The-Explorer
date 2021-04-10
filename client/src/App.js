@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import { Navbar,Spinner} from 'react-bootstrap';
 import Dora from './Components/dora.png';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import Home from './Components/Home';
+import Home from './Components/LoginPage';
 import Profile from './Components/Profile';
 import About from "./Components/About";
 import Admin from "./Components/Admin";
@@ -21,6 +21,7 @@ class App extends Component {
   }
   //No Change
   async loadWeb3() {
+    console.log("Hello COnosle")
     if (window.ethereum) {
       window.web3 = new Web3(window.ethereum)
       await window.ethereum.enable()
@@ -34,23 +35,24 @@ class App extends Component {
   }
   //Change here
   async loadBlockchainData() {
+    console.log("Hello COnosle 2")
     const web3 = window.web3
+    console.log("Hello COnosl 3")
     // Load account
-    //const adminid = "0xC5f2f554ff3640f975BB8d8CAD49922e69dc2956"
-    const adminid="0xa7c3e1dbE2B1D4b6f5D1b5B68E0F139a1EbE79bD"
+    const adminid="0x0AcA78aE5B1c1501df95136f2C6B431B4Fed1Ae6"
     const accounts = await web3.eth.getAccounts()
     this.setState({ account: accounts[0] })
     if(this.state.account === adminid){
-      console.log("Marjaaaa")
       this.setState({admin:true})
     }
     // Network ID
+    console.log("Hello COnosl 4")
     const networkId = await web3.eth.net.getId()
     const networkData = MyContract.networks[networkId]
     if(networkData) {
       const instance = new web3.eth.Contract(MyContract.abi, networkData.address)
       this.setState({ instance })
-      
+      console.log("Hello COnosl 5")
       //Change here
       // Write your logic to load data stored in your Smart Contract
       const queCount = await instance.methods.queCount().call()
@@ -64,10 +66,10 @@ class App extends Component {
         })  
       }
 
-
       const ansCount = await instance.methods.ansCount().call()
       this.setState({ ansCount })
       
+      console.log("Hello COnosl 6")
       //Load Answers
       for (var j = 0; j < ansCount; j++) { 
         const ans = await instance.methods.answers(j).call()
@@ -76,6 +78,28 @@ class App extends Component {
         })  
       }
 
+      //Load Students
+      const stuCount = await instance.methods.stuCount().call()
+      this.setState({ stuCount })   
+      console.log("Hello COnosl 7")
+      //Load Students   
+      for (var i = 1; i <= stuCount; i++) {
+        const stu = await instance.methods.students(i).call()
+        // const astu = await instance.methods.addedStudents(i).call()
+        this.setState({
+          students: [...this.state.students, stu]
+        })  
+      }
+
+      for (var j = 0; j < stuCount; j++) { 
+        const astu = await instance.methods.addedStudents(j).call()
+        this.setState({
+          addedStudents: [...this.state.addedStudents, astu]
+        })  
+      }
+
+      console.log(this.state.addedStudents)
+      console.log(this.state.students)
       //No Change
       this.setState({ web3, accounts, contract: instance });
       this.setState({ loading: false})
@@ -90,16 +114,22 @@ class App extends Component {
     this.state = {
       account: '',
       questions: [],
+      students: [],
+      addedStudents: [],
       loading: true,
       queCount: 0,
       ansCount: 0,
+      stuCount:0,
       answers: [],
       admin: false,
+      verifiedStudent: false
   }
 
     this.postQuestion = this.postQuestion.bind(this)
     this.addAnswer = this.addAnswer.bind(this)
     this.tipAnswer = this.tipAnswer.bind(this)
+    this.addStudent = this.addStudent.bind(this)
+    // this.verifyStudent = this.verifyStudent.bind(this)
   }
 
   postQuestion(que){
@@ -116,6 +146,7 @@ class App extends Component {
     .once('receipt', (receipt) => {
       this.setState({ loading: false })
     })
+
   }
   
   tipAnswer(ansId, tipAmount){
@@ -125,72 +156,104 @@ class App extends Component {
     })
   }
 
+  addStudent(userName, accountAddress){
+    this.setState({ loading: true })
+    this.state.instance.methods.addStudent(userName, accountAddress).send({ from: this.state.account })
+    .once('receipt', (receipt) => {
+      this.setState({ loading: false })
+    })
+  }
+
+  // verifyStudent(stuId, userName, accountAddress){
+  //   this.setState({ loading: true })
+  //   // Get the value from the contract to prove it worked.
+  //   this.state.instance.methods.verifyStudent(stuId, userName, accountAddress).call({from: this.state.account}, function(error, result){
+  //     console.log(result)
+  //     this.setState({verifiedStudent: result})
+  //     })
+  //     this.setState({ loading: false })
+  // }
+
   render() {
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
     else{
       if(this.state.admin){
-        return <div> <Admin/> </div>;
+        return <div> <Admin addStudent={this.addStudent}/> </div>;
       }
       else{
       
-        return (
+        //find if current account is in addedStudent array
+
+        const ok = this.state.addedStudents.includes(this.state.account)
+          console.log(ok)
+
+        if(!ok){
+          
+          return (<div>
+            <p>INVALID ENTRY</p>
+          </div>);
+
+        }else{
+          
+          return (
         
-          <div className="App">
-            <div class="InputBox">
-                  { this.state.loading
-                    ? <div id="loader" className="text-center">
-                      <Spinner animation="border" role="status">
-                        <span className="sr-only">Loading...</span>
-                      </Spinner>
-                      <p className="text-center">Loading...</p></div>
-                    :<div> 
-    
-                      
-                      <Router>
-                        <div>
-                          <Navbar bg="dark" variant="dark" height="30" style={{marginTop:"0%"}}>
-                            <Navbar.Brand >
-                              <Link to={'/'} className="nav-link" style={{fontFamily:"sans-serif", fontWeight:"bold", color:"white"}}><img src={Dora} width="100" height="50"/>THE EXPLORER</Link>
-                            
-                            </Navbar.Brand>
-                          
-                          <ul className="navbar-nav mr-auto" style={{paddingLeft:"57%"}}>
-                          <li><Link to={'/questionInput'} className="nav-link" style={{fontFamily:"sans-serif", fontWeight:"bold", color:"white"}}>Dora World</Link></li>
-                          <li><Link to={'/profile'} className="nav-link" style={{fontFamily:"sans-serif", fontWeight:"bold", color:"white"}}>My Profile</Link></li>
-                          <li><Link to={'/about'} className="nav-link" style={{fontFamily:"sans-serif", fontWeight:"bold", color:"white"}}>About Us</Link></li>                        
-                          </ul>
-                          </Navbar>
-                          
-                          <Switch>
-                              <Route exact path='/' component={Home} />
-                              <Route exact path='/' component={QuestionInput} />
-                              <Route path='/profile' render={(props) => <Profile author={this.state.account} questions={this.state.questions}                   
-                                    answers={this.state.answers} {...props}/>}/>
-    
-                              <Route path="/questionInput" render={(props) => <QuestionInput questions={this.state.questions}                   
-                                    postQuestion={this.postQuestion} 
-                                    addAnswer={this.addAnswer}
-                                    answers={this.state.answers}
-                                    tipAnswer={this.tipAnswer} {...props}/>}/>
-                              <Route path='/about' component={About} />
-                          </Switch>
-                        </div>
+            <div className="App">
+              <div class="InputBox">
+                    { this.state.loading
+                      ? <div id="loader" className="text-center">
+                        <Spinner animation="border" role="status">
+                          <span className="sr-only">Loading...</span>
+                        </Spinner>
+                        <p className="text-center">Loading...</p></div>
+                      :<div> 
                         
-                      </Router>
-    
-                                            
-                     </div>
-                     
-                     
-                  }
+                        <Router>
+                          <div>
+                            <Navbar bg="dark" variant="dark" height="30" style={{marginTop:"0%"}}>
+                              <Navbar.Brand >
+                                <Link to={'/'} className="nav-link" style={{fontFamily:"sans-serif", fontWeight:"bold", color:"white"}}><img src={Dora} width="100" height="50"/>THE EXPLORER</Link>
+                              
+                              </Navbar.Brand>
+                            
+                            <ul className="navbar-nav mr-auto" style={{paddingLeft:"57%"}}>
+                            <li><Link to={'/questionInput'} className="nav-link" style={{fontFamily:"sans-serif", fontWeight:"bold", color:"white"}}>Dora World</Link></li>
+                            <li><Link to={'/profile'} className="nav-link" style={{fontFamily:"sans-serif", fontWeight:"bold", color:"white"}}>My Profile</Link></li>
+                            <li><Link to={'/about'} className="nav-link" style={{fontFamily:"sans-serif", fontWeight:"bold", color:"white"}}>About Us</Link></li>                        
+                            </ul>
+                            </Navbar>
+                            
+                            <Switch>
+                            {/* <Route path='/' render={(props) => <Home verifyStudent={this.verifyStudent} {...props}/>}/> */}
+                        
+                                <Route path='/profile' render={(props) => <Profile author={this.state.account} questions={this.state.questions}                   
+                                      answers={this.state.answers} {...props}/>}/>
+      
+                                <Route path="/questionInput" render={(props) => <QuestionInput questions={this.state.questions}                   
+                                      postQuestion={this.postQuestion} 
+                                      addAnswer={this.addAnswer}
+                                      answers={this.state.answers}
+                                      tipAnswer={this.tipAnswer} {...props}/>}/>
+                                <Route path='/about' component={About} />
+                            </Switch>
+                          </div>
+                          
+                        </Router>
+      
+                                              
+                       </div>
+                       
+                       
+                    }
+              </div>
+              
             </div>
             
-          </div>
-          
-          
-        );
+            
+          );
+        }
+        
     }
     }
     
