@@ -20,7 +20,7 @@ export default class SignUp extends Component {
                                         this.inputUserName = input_1
                                     }}
                                     type="text"
-                                    style={{ width: "10%", marginLeft: "45%", marginRight: "45%" }}
+                                    style={{ width: "50%", marginLeft: "25%", marginRight: "45%" }}
                                     className="form-control"
                                     placeholder="User Name"
                                     required />
@@ -30,10 +30,10 @@ export default class SignUp extends Component {
                                     ref={(input_2) => {
                                         this.inputAccountAddress = input_2
                                     }}
-                                    type="text-area"
+                                    type="text"
                                     className="form-control"
                                     placeholder="0X000000000000000000000000000000000"
-                                    style={{ height: "5em", marginLeft: "4%", marginRight: "5%", width: "91%", }}
+                                    style={{ height: "3em", marginLeft: "4%", marginRight: "5%", width: "97%", }}
                                     required />
 
                                     <input type="submit" hidden={true} />
@@ -42,7 +42,7 @@ export default class SignUp extends Component {
                                 </Form>
                                 <br></br>
 
-                                <Button variant="primary" type="submit">
+                                <Button variant="primary" type="submit" style={{marginLeft: "30%"}}>
                                 Register Student
                                 </Button>
                                 <br></br>  

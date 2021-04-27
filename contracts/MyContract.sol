@@ -31,7 +31,7 @@ contract MyContract {
         string userName;
         address accountAddress;
     }
-    event verifiedStudent(bool _value);
+    
 
     function postQuestion(string memory _question) public {
         

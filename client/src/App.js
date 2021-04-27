@@ -12,6 +12,7 @@ import Profile from './Components/Profile';
 import About from "./Components/About";
 import Admin from "./Components/Admin";
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import InvalidStudent from './Components/InvalidStudent';
 
 class App extends Component {
 //No Change 
@@ -39,7 +40,7 @@ class App extends Component {
     const web3 = window.web3
     console.log("Hello COnosl 3")
     // Load account
-    const adminid="0x0AcA78aE5B1c1501df95136f2C6B431B4Fed1Ae6"
+    const adminid="0xC5f2f554ff3640f975BB8d8CAD49922e69dc2956"
     const accounts = await web3.eth.getAccounts()
     this.setState({ account: accounts[0] })
     if(this.state.account === adminid){
@@ -129,7 +130,7 @@ class App extends Component {
     this.addAnswer = this.addAnswer.bind(this)
     this.tipAnswer = this.tipAnswer.bind(this)
     this.addStudent = this.addStudent.bind(this)
-    // this.verifyStudent = this.verifyStudent.bind(this)
+    
   }
 
   postQuestion(que){
@@ -164,15 +165,6 @@ class App extends Component {
     })
   }
 
-  // verifyStudent(stuId, userName, accountAddress){
-  //   this.setState({ loading: true })
-  //   // Get the value from the contract to prove it worked.
-  //   this.state.instance.methods.verifyStudent(stuId, userName, accountAddress).call({from: this.state.account}, function(error, result){
-  //     console.log(result)
-  //     this.setState({verifiedStudent: result})
-  //     })
-  //     this.setState({ loading: false })
-  // }
 
   render() {
     if (!this.state.web3) {
@@ -192,7 +184,7 @@ class App extends Component {
         if(!ok){
           
           return (<div>
-            <p>INVALID ENTRY</p>
+            <InvalidStudent></InvalidStudent>
           </div>);
 
         }else{
