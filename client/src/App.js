@@ -2,17 +2,17 @@ import React, { Component } from "react";
 import MyContract from "./contracts/MyContract.json";
 import Web3 from 'web3';
 import "./App.css";
-import QuestionInput from './Components/QuestionInput';
+import QuestionInput from './Components/QuestionInput/QuestionInput';
 import "bootstrap/dist/css/bootstrap.css";
 import { Navbar,Spinner} from 'react-bootstrap';
-import Dora from './Components/dora.png';
+import Dora from './Components/Img/dora.png';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import Home from './Components/LoginPage';
-import Profile from './Components/Profile';
-import About from "./Components/About";
-import Admin from "./Components/Admin";
+//import Home from './Components/Login/LoginPage';
+import Profile from './Components/Profile/Profile';
+import About from "./Components/About/About";
+import Admin from "./Components/Admin/Admin";
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import InvalidStudent from './Components/InvalidStudent';
+import InvalidStudent from './Components/InvalidStudent/InvalidStudent';
 
 class App extends Component {
 //No Change 

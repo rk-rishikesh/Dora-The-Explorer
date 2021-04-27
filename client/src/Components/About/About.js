@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import "./ProfileBox.css";
+import '../Profile/ProfileBox.css';
 import { Card, CardDeck, ListGroupItem } from 'react-bootstrap';
 class About extends Component {
     render() {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Form, Button, Col, InputGroup, FormControl } from 'react-bootstrap';
-import "../index.css";
+import './question.css'
 class QuestionInput extends Component {
 
   render() {

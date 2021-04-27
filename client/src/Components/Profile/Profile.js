@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Card, InputGroup } from 'react-bootstrap';
-import Dora from './photo.jpg';
-import Landscape from './landscape.jpg';
-import "./ProfileBox.css";
+import Dora from '../Img/photo.jpg';
+import '../Profile/ProfileBox.css';
 import ReactRoundedImage from "react-rounded-image";
 
 class Profile extends Component {
